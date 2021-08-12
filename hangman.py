@@ -1,13 +1,16 @@
 # a console game
-# date: aug 7,8 2021
+# date: aug 7,8,9 2021
 from random import choice
 
 word_i = str()
 counter = int()
+pattern = [' |-------', ' |   |', ' |    ', r' |      ', ' |    ', r' |      ', ' |']
+
 
 def fun_pattern(word:str, *args):
 	global word_i
 	global counter
+	
 	
 	if len(args) == 2:
 		guess, index_nums = args
@@ -19,8 +22,27 @@ def fun_pattern(word:str, *args):
 	else:
 		word_i = "__ "*len(word)
 		
+	global pattern
+	if len(pattern) == 8:
+		pattern.pop(-1)
+	pattern.append(f'---\t\t word: {word_i}')
+	
+	if counter == 1: 
+		pattern[2] = ' |   O'
+	elif counter == 2: 
+		pattern[3] = ' |   |'
+	elif counter == 3: 
+		pattern[3] = ' |  /|'
+	elif counter == 4:
+		pattern[3] = ' |  /|\ '
+	elif counter == 5:
+		pattern[4] = ' |   |'
+	elif counter == 6:
+		pattern[5] = ' |  /'
+	elif counter == 7:
+		pattern[5] = ' |  / \ '
 
-	pattern = [' |-------', ' |   |', ' |    ', r' |      ', ' |    ', r' |      ', ' |', f'---\t\t word: {word_i}']
+	
 	for i in pattern:
 		print(i)
 
@@ -42,6 +64,7 @@ def get_a_word() -> str:
 def get_guess() -> str:	
 	while 1:
 		word_or_letter = input('Guess a letter (1)\nGuess the word (2) : ')
+		
 		if word_or_letter == '1':
 			while 1:
 				guess = input('Type a letter :')
@@ -53,8 +76,10 @@ def get_guess() -> str:
 		elif word_or_letter == '2':
 			guess = input('Type the word :')
 			break
+		elif word_or_letter in 'qQ':
+			exit()
 		else:
-			print('Do Not Type Other Things!(or q)')
+			print('Do Not Type Other Things!(for quit (q))')
 			continue
 	return guess
 
@@ -93,7 +118,7 @@ def main() -> None:
 		if guess == word:
 			print('YOU WON!')
 			break
-		elif guess == 'Q': exit()
+		
 		elif guess in word and len(guess) == 1:
 			index_nums = get_index_nums(guess, word)
 			fun_pattern(word, guess, index_nums)
@@ -103,7 +128,7 @@ def main() -> None:
 				break
 		else:
 			fun_pattern(word, False)
-			if counter == 6:
+			if counter == 7:
 				print('GAME OVER!')
 				break
 
